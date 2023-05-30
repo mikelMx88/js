@@ -6,8 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./estilos.css">
     <title>Mi primer pagina</title>
+    <!-- #2 - Etiqueda script desde head -->
+    <script defer>
+        alert("Se ejecuta desde el head");
+    </script>
+    <!-- #3 - Desde un archivo externo -->
+    <script defer src="./holaMundo.js"></script>
 </head>
 <body>
-    <h5>Hola mundo</h5>
+    <h1>Hola mundo</h1>
+    <script>
+        document.write('<h2> Hola mundo </h2>');
+        alert('Esto es una alerta');
+        console.log('Hola, desde la consola');
+        // getElementById();
+    </script>
 </body>
 </html>
