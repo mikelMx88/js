@@ -1,0 +1,147 @@
+<div class="modal fade bd-example-modal-lg" id="detallesOrden" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="padding-top:50px;">
+  	<div class="modal-dialog modal-xl modal-dialog-scrollabl" role="document">
+		<form method="POST" id="form-detalles-orden" action="<?php echo base_url('Plantillas/generar_pdf_orden/') ?>">
+			<div class="modal-content">
+				<div class="modal-header" style="max-height:50px;">
+					<h5 class="modal-title" id="exampleModalLongTitle">Detalle de Orden de Servicio</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="max-height:50px;">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+
+				<div class="modal-body">
+					<!-- <?php if ($this->input->post('id_partida')): ?>
+						<?php if(validation_errors()): ?>
+							<div class="alert alert-info">
+								<?php echo validation_errors(); ?>
+							</div>
+						<?php endif; ?>
+					<?php endif; ?> -->
+
+					<div class="row gtr-uniform" style="padding:10px">
+						<div class="col-2 col-12-xsmall">
+							<label for="num_OS">No. Orden de Servicio</label>
+							<input type="text" name="num_OS" id="num_OS" value="" readonly  disabled/>
+							<input type="hidden" name="id_Orden" id="id_Orden" value="">
+							<!-- <input type="hidden" name="id_Orden" id="id_Orden" value="<?php echo $idOrdenServicio ?>"> -->
+							<input type="hidden" name="id_Cotizacion" id="id_Cotizacion" value="">
+							<!-- <input type="hidden" name="id_Cotizacion" id="id_Cotizacion" value="<?php echo $cotizacion ?>"> -->
+						</div>
+						<div class="col-7 col-12-xsmall">
+							<label for="cliente">Cliente</label>
+							<input type="text" name="cliente" id="cliente" value="" readonly disabled />
+							<!-- <input type="text" name="cliente" id="cliente" value="<?php echo $cliente ?>" readonly disabled /> -->
+							<input type="hidden" name="id_cliente" id="id_cliente" value="">
+							<!-- <input type="hidden" name="id_cliente" id="id_cliente" value="<?php echo $idCliente ?>"> -->
+						</div>
+						<div class="col-3 col-12-xsmall">
+							<label for="">Fecha de elaboración</label>
+							<input type="date" name="fechaOS" id="fechaOS" value="">
+							<!-- <input type="date" name="fechaOS" id="fechaOS" value="" onchange="modificar_valor('<?php echo $idOrdenServicio ?>')"> -->
+						</div>
+						<div class="col-12 col-12-medium">
+							<div table="table-wrapper">              
+								<table class="table table-bordered table-striped dataTable alt text-center compact">
+									<thead>
+										<tr>
+											<th style="width: 20px">Partida</th>
+											<th style="width: 250px">Descripción del servicio</th>
+											<th style="width: 20px">Cantidad</th>
+											<th style="width: 80px">Fecha límite mestreo | ensayo</th>
+										</tr>
+									</thead>
+									<tbody id="table_details_orden">                  
+										<!-- <?php $i=1; ?>
+										<?php foreach($partidas as $partida): ?>
+											<tr class="text-center">
+											<td><?php echo $i ?></td>
+											<td><?php echo $partida->descripcion ?></td>
+											<td><?php echo $partida->num_muestras ?></td>
+											<td><?php echo $partida->fechaLimite ?></td>
+											</tr>
+										<?php $i+= 1;
+										endforeach ?> -->
+									</tbody>
+								</table>
+							</div>
+							<div class="col-12 col-12-xsmall">
+								<label for="observaciones">Observaciones</label>
+								<textarea name="observaciones" id="ordenObservaciones" rows="2"></textarea>
+								<!-- <textarea name="observaciones" id="ordenObservaciones" rows="2" onchange="modificar_valor('<?php echo $idOrdenServicio ?>')"></textarea> -->
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="modal-footer">                
+					<!-- <a href="<?php echo base_url("Plantillas/print_datasheet/") . $idCliente . "/" . $idOrdenServicio ?>" target="_blank" class="btn button" title="Descargar archivo"><i class="fa fa-file-pdf fa-2x"></i>Hoja de datos</a> -->
+					<a href="<?php echo base_url("Plantillas/print_datasheet/")?>"  target="_blank" class="btn button" title="Descargar archivo"><i class="fa fa-file-pdf fa-2x"></i>Hoja de datos</a>
+					<button type="submit" id="btn-print-order" class="btn button"  title="Descargar archivo"><i class="fa fa-file-pdf fa-2x"></i>Orden de Servicio</button>
+				</div>
+			</div>
+		</form>
+  	</div>
+</div>
+
+<script type="text/javascript">
+	var table_res = $('#table_res').DataTable( {
+		select: false,
+		searching: false,
+		ordering:  false,
+		info:     false,
+		scrollCollapse: true,
+		paging:         false,
+		//emptyTable: "No disponible en la tabla",
+		columns: [
+			{ data: 'Crear la orden' },
+			{ data: 'No. de Partida' },
+			{ data: 'No. de Muestra' },
+			{ data: 'Fecha Programada' },
+			{ data: 'Punto de Muestreo' }    
+		],
+		language: {
+			url: "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json"
+		}
+	} );
+
+	$('#form-detalles-orden').submit(function (e) {
+		let  frmData = $(this).serialize();
+		console.log(frmData);
+		window.open('<?php echo base_url('Plantillas/generar_pdf_orden/?');?>'+frmData,'_blank');
+		return false;
+	});
+
+	function modificar_valor(id) {
+		console.log('entre a modificar valor');
+		$.ajax({
+			async:true,
+			cache:false,
+			dataType:"html",
+			type: 'POST',
+			url: '<?php echo base_url('Ordenes/modificar_valor_orden_servicio'); ?>',
+			data: {
+				id:id,
+				observaciones: $('#ordenObservaciones').val(),
+				fechaOS: $('#fechaOS').val(),
+				'<?php echo $this->security->get_csrf_token_name(); ?>' : '<?php echo $this->security->get_csrf_hash(); ?>'
+			},
+			success:  function(data){
+			let datos = JSON.parse(data);
+			if (datos.bandera) {
+				Toast.fire({
+					icon: 'success',
+					title: 'Datos actualizados exitosamente.'
+				});
+			} else {
+				Toast.fire({
+					icon: 'error',
+					title: datos.mensaje
+				});
+			}
+		},
+		beforeSend:function(){},
+		error:function(objXMLHttpRequest){}
+		});
+	}
+
+</script>
