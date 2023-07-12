@@ -1,0 +1,18 @@
+// export default () => {
+//     return{
+//         nombre: 'Mikel',
+//         correo: 'mikel@correo.com'
+//     };
+// }
+
+
+
+const obtenerUsuario = () => {
+    return{
+        nombre: 'Mikel',
+        correo: 'mikel@correo.com'
+    };
+}
+
+
+export default obtenerUsuario;
