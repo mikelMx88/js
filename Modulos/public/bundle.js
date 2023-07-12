@@ -1,19 +1,26 @@
 'use strict';
 
-// export const nombre = "Mikel";
-
-// export const obtenerPost = () => {
-//     return ['Post1','Post2','Post3'];
+// export default () => {
+//     return{
+//         nombre: 'Mikel',
+//         correo: 'mikel@correo.com'
+//     };
 // }
 
-const nombre = "Mikel";
 
-const obtenerPost = () => {
-    return ['Post1','Post2','Post3'];
+
+const obtenerUsuario = () => {
+    return {
+        nombre: 'Mikel',
+        correo: 'mikel@correo.com'
+    };
 };
+
+console.log('Soy codigo que se ejecuta desde el empty export');
+
+const correo = 'correo@correo.com';
 
 // import { nombre as nombreImportado, obtenerPost } from "./namedExports";
 
-
-console.log(nombre);
-console.log(obtenerPost());
+console.log(obtenerUsuario());
+console.log(correo);
